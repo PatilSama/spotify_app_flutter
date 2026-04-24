@@ -23,7 +23,7 @@ class _GetStartedState extends State<GetStarted> {
       body: Stack(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 40,vertical: 40),
+            padding: EdgeInsets.symmetric(horizontal: 40),
             // width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
