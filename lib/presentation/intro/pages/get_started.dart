@@ -35,7 +35,7 @@ class _GetStartedState extends State<GetStarted> {
           ),
           Container(color: Colors.black.withOpacity(0.15),),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40,horizontal: 40),
+            padding: const EdgeInsets.symmetric(vertical: 40),
             child: Column(
               children: [
                 Align(
