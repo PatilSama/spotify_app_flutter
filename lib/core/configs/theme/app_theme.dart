@@ -2,20 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:spotify_app/core/configs/theme/app_colors.dart';
 
 class AppTheme {
-
   static final lightTheme = ThemeData(
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.lightBackground,
     brightness: Brightness.light,
     fontFamily: 'satoshi',
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.transparent,
+      contentPadding: EdgeInsets.all(30),
+      hintStyle: TextStyle(color: Color(0xff383838),fontWeight: FontWeight.w500),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: Colors.black, width: 0.4),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: Colors.black, width: 0.4),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: Colors.black, width: .4),
+      ),
+
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
-        textStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
-      )
+        elevation: 0,
+        foregroundColor: Colors.white,
+        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      ),
     ),
-
   );
 
   static final darkTheme = ThemeData(
@@ -23,12 +42,32 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.darkBackground,
     brightness: Brightness.dark,
     fontFamily: 'satoshi',
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.transparent,
+      contentPadding: EdgeInsets.all(30),
+      hintStyle: TextStyle(color: Color(0xffA7A7A7),fontWeight: FontWeight.w500),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: Colors.white, width: 0.4),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: Colors.black, width: 0.4),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: Colors.black, width: .4),
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
-        textStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
-      )
-    )
+        elevation: 0,
+        foregroundColor: Colors.white,
+        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      ),
+    ),
   );
 }
