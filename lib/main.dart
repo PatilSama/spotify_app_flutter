@@ -8,6 +8,7 @@ import 'package:spotify_app/core/configs/theme/app_theme.dart';
 import 'package:spotify_app/firebase_options.dart';
 import 'package:spotify_app/presentation/choose_mode/bloc/theme_cubit.dart';
 import 'package:spotify_app/presentation/choose_mode/pages/choose_mode.dart';
+import 'package:spotify_app/presentation/home/pages/home.dart';
 import 'package:spotify_app/presentation/splash/pages/splash.dart';
 import 'package:spotify_app/service_locator.dart';
 
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: mode,
-          home: SplashPage(),
+          // home: SplashPage(),
+          home: HomePage(),
         ),
       ),
     );
