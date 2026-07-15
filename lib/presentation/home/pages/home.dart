@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotify_app/common/helpers/is_dark_mode.dart';
 import 'package:spotify_app/common/widgets/appbar/app_bar.dart';
 import 'package:spotify_app/core/configs/assets/app_images.dart';
 import 'package:spotify_app/core/configs/assets/app_vector.dart';
+import 'package:spotify_app/core/configs/theme/app_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +13,16 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 4, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,34 +32,48 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [_homeTopCard()],
-        ),
+            children: [_homeTopCard(), _tab()]),
       ),
     );
   }
 
   Widget _homeTopCard() {
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 140,
-              child: SvgPicture.asset(AppVector.homeTopCard,),
+    return SizedBox(
+      height: 180,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SvgPicture.asset(AppVector.homeTopCard),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(right: 40.0, bottom: 0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Image.asset(AppImages.homeArtiest),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 0.0,bottom: 40),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: Image.asset(AppImages.homeArtiest),
-          ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Widget _tab() {
+    final TextStyle? bodyStyle = Theme.of(context).textTheme.bodyMedium;
+    return TabBar(
+      controller: _tabController,
+      labelColor: context.isDarkMode ? Colors.white : Colors.black,
+      isScrollable: false,
+      indicatorColor: AppColors.primary,
+      tabAlignment: TabAlignment.center,
+      padding: EdgeInsets.symmetric(vertical: 40, horizontal: 0),
+      tabs: [
+        Tab(child: Text("News", style: bodyStyle)),
+        Tab(child: Text("Videos", style: bodyStyle)),
+        Tab(child: Text("Artists", style: bodyStyle)),
+        Tab(child: Text("Podcasts", style: bodyStyle)),
       ],
     );
   }
