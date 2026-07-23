@@ -36,32 +36,37 @@ class NewsSongs extends StatelessWidget {
   }
 
   Widget _songs(List<SongEntity> songs) {
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        print("Songs Data = ${songs[index].title}");
-        var url =  '${AppUrl.firestorage}${songs[index].artist} - ${songs[index].title}.jpg?${AppUrl.mediaAlt}';
-        print('url= $url');
-        return Column(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                     url,
+    return SizedBox(
+      height: 160,
+
+      child: ListView.separated(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        scrollDirection: Axis.horizontal,
+        itemCount: songs.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 14),
+        itemBuilder: (context, index) {
+          var url = '${AppUrl.firestorage}${songs[index].imageName}${AppUrl.mediaAlt}';
+          return Column(
+            children: [
+              Expanded(
+                child: Container(
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(30),
+                    image:  DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        '${AppUrl.firestorage}${songs[index].imageName}${AppUrl.mediaAlt}',
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
-      separatorBuilder: (context, index) {
-        return SizedBox(width: 14);
-      },
-      itemCount: songs.length,
+            ],
+          );
+        },
+      ),
     );
   }
 }
