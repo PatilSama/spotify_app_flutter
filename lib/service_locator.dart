@@ -9,6 +9,7 @@ import 'package:spotify_app/domain/usecases/auth/signup.dart';
 import 'package:spotify_app/domain/usecases/song/get_news_songs.dart';
 
 import 'domain/usecases/auth/sign_in.dart';
+import 'domain/usecases/song/get_play_list.dart';
 
 final sl = GetIt.instance;
 
@@ -20,4 +21,5 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<SignUpUseCase>(SignUpUseCase());
   sl.registerSingleton<SignInUseCase>(SignInUseCase());
   sl.registerSingleton<GetNewsSongsUseCase>(GetNewsSongsUseCase());
+  sl.registerSingleton<GetPlayListUseCase>(GetPlayListUseCase());
 }

@@ -5,7 +5,12 @@ import 'package:spotify_app/service_locator.dart';
 
 class SongRepositoryImpl extends SongRepository {
   @override
-  Future<Either<dynamic, dynamic>> getNewsSongs() async{
+  Future<Either<dynamic, dynamic>> getNewsSongs() async {
     return await sl<SongFirebaseService>().getNewsSongs();
+  }
+
+  @override
+  Future<Either<dynamic, dynamic>> getPlayList() async {
+    return await sl<SongFirebaseService>().getPlayList();
   }
 }
