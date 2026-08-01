@@ -7,13 +7,17 @@ class SongModel {
   String? artist;
   num? duration;
   Timestamp? releasedate;
+  bool? isFavorite;
+  String? songId;
 
   SongModel({
     required this.title,
     required this.artist,
     required this.duration,
     required this.releasedate,
-    required this.imageName
+    required this.imageName,
+    required this.isFavorite,
+    required this.songId,
   });
 
   SongModel.fromJson(Map<String, dynamic> data) {
@@ -33,6 +37,8 @@ extension SongModelx on SongModel {
       artist: artist,
       duration: duration,
       releasedate: releasedate,
+      isFavorite: isFavorite,
+      songId: songId,
     );
   }
 }

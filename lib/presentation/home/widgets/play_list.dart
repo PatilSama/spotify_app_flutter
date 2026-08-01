@@ -70,68 +70,66 @@ class PlayList extends StatelessWidget {
               MaterialPageRoute(builder: (_) => SongPlayer(songEntity: songs[index],)),
             );
           },
-          child: Hero(
-            tag:songs[index].imageName.toString(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.isDarkMode
-                              ? AppColors.darkGray
-                              : const Color(0xffE6E6E6),
-                        ),
-                        child: Icon(
-                          Icons.play_arrow_rounded,
-                          color: context.isDarkMode
-                              ? const Color(0xff959595)
-                              : const Color(0xff555555),
-                        ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: context.isDarkMode
+                            ? AppColors.darkGray
+                            : const Color(0xffE6E6E6),
+                      ),
+                      child: Icon(
+                        Icons.play_arrow_rounded,
+                        color: context.isDarkMode
+                            ? const Color(0xff959595)
+                            : const Color(0xff555555),
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${songs[index].title?.trim()}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${songs[index].title?.trim()}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          "${songs[index].artist}",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(songs[index].duration.toString().replaceAll(".", ":")),
-                    SizedBox(width: 20),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.favorite_rounded,
-                        color: AppColors.darkGray,
                       ),
+                      Text(
+                        "${songs[index].artist}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(songs[index].duration.toString().replaceAll(".", ":")),
+                  SizedBox(width: 20),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.favorite_outline_outlined,
+                      size: 25,
+                      color: AppColors.darkGray,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },

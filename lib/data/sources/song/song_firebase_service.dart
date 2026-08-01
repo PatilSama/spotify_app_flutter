@@ -1,13 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:spotify_app/data/models/song/song.dart';
 import 'package:spotify_app/domain/entities/song/song.dart';
+import 'package:spotify_app/domain/usecases/song/is_favorite_song.dart';
+import 'package:spotify_app/service_locator.dart';
 
 abstract class SongFirebaseService {
   Future<Either> getNewsSongs();
 
   Future<Either> getPlayList();
+
+  Future<Either> addOrRemoveFavoriteSongs(String songId);
+
+  Future<bool> isFavoriteSong(String songId);
 }
 
 class SongFirebaseServiceImpl extends SongFirebaseService {
@@ -23,6 +30,11 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
 
       for (var element in data.docs) {
         var songModel = SongModel.fromJson(element.data());
+        bool isFavorite = await sl<IsFavoriteSongUseCase>().call(
+          params: element.reference.id
+        );
+        songModel.isFavorite = isFavorite;
+        songModel.songId = element.reference.id;
         songs.add(songModel.toEntity());
       }
       return right(songs);
@@ -36,16 +48,20 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
 
   @override
   Future<Either<dynamic, dynamic>> getPlayList() async {
-    List<SongEntity> songs= [];
+    List<SongEntity> songs = [];
     try {
       var data = await FirebaseFirestore.instance
           .collection("songs")
           .orderBy('releasedate', descending: true)
           .get();
 
-
-      for(var element in data.docs){
+      for (var element in data.docs) {
         var songModel = SongModel.fromJson(element.data());
+        bool isFavorite = await sl<IsFavoriteSongUseCase>().call(
+          params: element.reference.id
+        );
+        songModel.isFavorite = isFavorite;
+        songModel.songId = element.reference.id;
         songs.add(songModel.toEntity());
       }
       // final jsnList = data.docs.map((ele) => ele.data()).toList();
@@ -69,5 +85,60 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
       return SongModel.fromJson(element).toEntity();
     }).toList();
     return songs;
+  }
+
+  @override
+  Future<Either> addOrRemoveFavoriteSongs(String songId) async {
+    try {
+      final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+      late bool isFavorite;
+      var user = firebaseAuth.currentUser;
+      String uId = user!.uid;
+      QuerySnapshot favoriteSongs = await firebaseFirestore
+          .collection("users")
+          .doc(uId)
+          .collection("favorite")
+          .where("songId", isEqualTo: songId)
+          .get();
+      if (favoriteSongs.docs.isNotEmpty) {
+        await favoriteSongs.docs.first.reference.delete();
+        isFavorite = false;
+      } else {
+        firebaseFirestore
+            .collection('users')
+            .doc(uId)
+            .collection('favorite')
+            .add({'songId': uId, 'addedDate': Timestamp.now()});
+        isFavorite = true;
+      }
+      return right(isFavorite);
+    } catch (error) {
+      return left("An Error Occurred");
+    }
+  }
+
+  @override
+  Future<bool> isFavoriteSong(String songId) async {
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    var user = firebaseAuth.currentUser;
+    String uId = user!.uid;
+    try {
+      QuerySnapshot favoriteSongs = await firebaseFirestore
+          .collection('users')
+          .doc(uId)
+          .collection('favorite')
+          .where('songId', isEqualTo: songId)
+          .get();
+      if (favoriteSongs.docs.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
   }
 }
