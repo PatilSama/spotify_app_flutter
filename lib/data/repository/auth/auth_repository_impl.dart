@@ -17,4 +17,9 @@ class AuthRepositoryImpl extends AuthRepository {
     // await sl<AuthFirebaseService>().signup(createUserReq);
     return await sl<AuthFirebaseService>().signup(createUserReq);
   }
+
+  @override
+  Future<Either<dynamic, dynamic>> getUser()async {
+  return await sl<AuthFirebaseService>().getUser();
+  }
 }

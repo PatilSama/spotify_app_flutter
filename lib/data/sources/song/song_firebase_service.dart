@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +17,7 @@ abstract class SongFirebaseService {
   Future<Either> addOrRemoveFavoriteSongs(String songId);
 
   Future<bool> isFavoriteSong(String songId);
+  Future<Either> getUserFavoriteSongs();
 }
 
 class SongFirebaseServiceImpl extends SongFirebaseService {
@@ -56,6 +59,7 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
           .get();
 
       for (var element in data.docs) {
+
         var songModel = SongModel.fromJson(element.data());
         bool isFavorite = await sl<IsFavoriteSongUseCase>().call(
           params: element.reference.id
@@ -89,6 +93,7 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
 
   @override
   Future<Either> addOrRemoveFavoriteSongs(String songId) async {
+
     try {
       final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
       final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -106,11 +111,11 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
         await favoriteSongs.docs.first.reference.delete();
         isFavorite = false;
       } else {
-        firebaseFirestore
+        await firebaseFirestore
             .collection('users')
             .doc(uId)
             .collection('favorite')
-            .add({'songId': uId, 'addedDate': Timestamp.now()});
+            .add({'songId': songId, 'addedDate': Timestamp.now()});
         isFavorite = true;
       }
       return right(isFavorite);
@@ -139,6 +144,34 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
       }
     } catch (error) {
       return false;
+    }
+  }
+
+  @override
+  Future<Either<dynamic, dynamic>> getUserFavoriteSongs() async{
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    var user = firebaseAuth.currentUser;
+    String uId = user!.uid;
+    List<SongEntity> favoriteSongs = [];
+    try {
+      QuerySnapshot favoriteSnapshot = await firebaseFirestore
+          .collection('users')
+          .doc(uId)
+          .collection('favorite')
+          .get();
+
+      for(var element in favoriteSnapshot.docs){
+        String songId = element['songId'];
+        var song = await firebaseFirestore.collection('songs').doc(songId).get();
+        SongModel songModel = SongModel.fromJson(song.data()!);
+        songModel.isFavorite = true;
+        songModel.songId = songId;
+        favoriteSongs.add(songModel.toEntity());
+      }
+      return right(favoriteSongs);
+    } catch (error) {
+      return left(error);
     }
   }
 }

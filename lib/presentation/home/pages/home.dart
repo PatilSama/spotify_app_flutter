@@ -7,6 +7,7 @@ import 'package:spotify_app/core/configs/assets/app_vector.dart';
 import 'package:spotify_app/core/configs/theme/app_colors.dart';
 import 'package:spotify_app/presentation/home/widgets/news_songs.dart';
 import 'package:spotify_app/presentation/home/widgets/play_list.dart';
+import 'package:spotify_app/presentation/profile/pages/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,6 +32,9 @@ class _HomePageState extends State<HomePage>
       appBar: BasicAppBar(
         title: SvgPicture.asset(AppVector.logo, height: 40, width: 40),
         hideBack: true,
+        action: IconButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (_)=>ProfilePage()));
+        }, icon: Icon(Icons.person)),
       ),
       body: SingleChildScrollView(
         child: Column(
